@@ -11,7 +11,7 @@ from typing import List
 
 import streamlit as st
 import streamlit_antd_components as sac
-from data_service import DolinphdbLoader, Loader
+from data_service import DolinphdbLoader, CSVLoder, Loader
 from page.factor_flow import FACTOR_FLOW
 from page.factor_compare import FACTOR_COMPARE
 from page.factor_compare import board_table
@@ -99,8 +99,9 @@ with st.sidebar.container():
     )
 
 with st.container():
-    loader: Loader = DolinphdbLoader()
-    factor_names: List[str] = loader.get_factor_name_list
+    # loader: Loader = DolinphdbLoader()
+    loader: Loader = CSVLoder("./data/price.parquet", "./data/factor.parquet")
+    factor_names: List[str] = loader.get_factor_name_list()
 
     if menu == "主页":
         overview()

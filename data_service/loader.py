@@ -175,7 +175,8 @@ class CSVLoder:
         if isinstance(fields, str):
             fields: List[str] = [fields]
         fields: List[str] = list({"trade_date", "code"}.union(fields))
-        df: pd.DataFrame = pd.read_csv(self.factor_path, parse_dates=True)
+        # df: pd.DataFrame = pd.read_csv(self.factor_path, parse_dates=True)
+        df: pd.DataFrame = pd.read_parquet(self.factor_path)
         df.sort_values("trade_date", inplace=True)
 
         df: pd.DataFrame = df.query(
@@ -194,7 +195,8 @@ class CSVLoder:
         end_dt: str,
         fields: Union[str, List],
     ) -> pd.DataFrame:
-        df: pd.DataFrame = pd.read_csv(self.price_path, parse_dates=True)
+        # df: pd.DataFrame = pd.read_csv(self.price_path, parse_dates=True)
+        df: pd.DataFrame = pd.read_parquet(self.price_path)
         df.sort_values("trade_date", inplace=True)
         fields: List[str] = list({"trade_date", "code"}.union(fields))
         df: pd.DataFrame = df.query(
@@ -206,11 +208,12 @@ class CSVLoder:
 
         return df
 
-    def get_factor_name(self) -> List[str]:
+    def get_factor_name_list(self) -> List[str]:
         # 获取csv文件的列名
-        df: pd.DataFrame = pd.read_csv(
-            self.factor_path, index_col=None, parse_dates=True, nrows=1
-        )
+        # df: pd.DataFrame = pd.read_csv(
+        #     self.factor_path, index_col=None, parse_dates=True, nrows=1
+        # )
+        df: pd.DataFrame = pd.read_parquet(self.factor_path)
         return [col for col in df.columns if col not in ["code", "trade_date"]]
 
 
